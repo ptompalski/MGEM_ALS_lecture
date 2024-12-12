@@ -1,0 +1,86 @@
+
+
+.references {
+  font-size: 70%;
+}
+aside {
+  font-size: 25%;
+  font-style: italic;
+  color: #d3d3d3;
+  
+}
+
+.footer {
+ font-size: 9px;
+}
+
+.text60 {
+  font-size: 60%
+}
+.text80 {
+  font-size: 80%
+}
+
+
+.title-center {
+  font-size: 1.5em;
+  font-weight: 600;
+  text-align: center;
+  margin: auto;
+}
+
+.threequarters-image {
+  width: 75%;
+  margin: auto;
+}
+
+.half-image {
+  width: 50%;
+  margin: auto;
+}
+
+.quarter-image {
+  width: 25%;
+  margin: auto;
+}
+
+
+.center {
+  margin: auto;
+  text-align: center;
+}
+
+.reveal .slide figure>figcaption {
+  font-size: 0.25em !important;
+  color: #d3d3d3 !important
+}
+
+
+.reveal .slide-logo {
+  height: 50px !important;
+  width: 354px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+  z-index: -999 !important;
+}
+
+.reveal small {
+ vertical-align: middle !important; 
+}
+
+
+.reveal .footer {
+  font-size: 35% !important;
+  text-align: left !important;
+  margin-left: 20px !important;
+  opacity: 50% !important;
+  
+}
+
+.slide-number {
+  opacity: 50% !important;
+}
+
+.slide-menu-button {
+  opacity: 0% !important;
+}

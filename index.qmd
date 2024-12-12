@@ -1,0 +1,95 @@
+---
+title: ""
+author: ""
+format:
+  revealjs:
+    self-contained: true
+    theme: simple
+    embed-resources: true
+    # logo: images\NRCan_CFS_logo_PT_englishOnly_small.png
+    footer: "piotr.tompalski@nrcan-rncan.gc.ca"
+    margin: 0.1
+    slide-number: true
+    show-slide-number: all
+    scrollable: false
+    chalkboard: false
+    revealjs-plugins:
+     - plugin/fullscreen
+    css: assets/style.css
+editor: source
+# bibliography: references.bib
+fig-dpi: 300
+---
+
+```{r}
+#| echo: false
+#| eval: true
+#| include: false
+
+library(tidyverse)
+library(ggplot2)
+library(lidR)
+library(terra)
+library(tmap)
+
+set.seed(1)
+
+knitr::opts_chunk$set(dev = "ragg_png")
+
+chm <- rast("data/chm.tif")
+
+# source("../../7_RS_AGB/code/0000_setup.R")
+# source("../../7_RS_AGB/code/9999_functions_modeling.R")
+
+
+```
+
+#  {background-color="white"}
+
+::: title-center
+Forest inventories with Aiborne Laser Scanning: Area- and individual tree approaches
+:::
+
+::: threequarters-image
+
+:::
+
+::: half-image
+![](images/NRCan_CFS_logo_PT.png){fig-alt="NRCan-CFS-logo"}
+:::
+
+::: footer
+:::
+
+## Overview
+
+- What is ITD / ITS? 
+- How it differs from ABA?
+- How can it be applied?
+- How accurate it is?
+- What are the pros and cons?
+- Examples of different algorithms 
+
+## Lidar-based inventories: two approaches
+
+Area-based approach 
+
+Individual tree approach
+
+## {fullscreen="true"}
+
+![](images/chm.png){fig-align="center"}
+
+## {fullscreen="true"}
+
+![](images/chm_wGrid.png){fig-align="center"}
+
+
+## {fullscreen="true"}
+
+![](images/chm_wCrowns.png){fig-align="center"}
+
+
+## UAV lidar + tree detection
+
+Puliti, S., Pearse, G., Surový, P., Wallace, L., Hollaus, M., Wielgosz, M., & Astrup, R. (2023). FOR-instance: a UAV laser scanning benchmark dataset for semantic and instance segmentation of individual trees (Version 1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.8287792
