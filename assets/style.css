@@ -1,3 +1,19 @@
+.citation {
+  font-size: 70% !important;
+  color: #525252 !important
+}
+
+.citation a {
+  color: #525252 !important
+}
+
+.sourceCode { 
+  max-width: unset !important
+}
+
+.reveal div.sourceCode {
+  border:0 !important;
+}
 
 
 .references {
@@ -44,6 +60,10 @@ aside {
   margin: auto;
 }
 
+.left {
+  
+  text-align: left;
+}
 
 .center {
   margin: auto;
@@ -51,8 +71,15 @@ aside {
 }
 
 .reveal .slide figure>figcaption {
-  font-size: 0.25em !important;
-  color: #d3d3d3 !important
+  font-size: 50% !important;
+  color: #d3d3d3 !important;
+  text-align: center !important
+}
+
+.caption {
+  font-size: 50% !important;
+  color: #d3d3d3 !important;
+  text-align: center !important
 }
 
 
@@ -83,4 +110,9 @@ aside {
 
 .slide-menu-button {
   opacity: 0% !important;
+}
+
+h2 {
+  margin-bottom: 20px !important;
+  text-shadow: #ffffff 1px 0 10px !important;
 }

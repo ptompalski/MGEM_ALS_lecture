@@ -17,7 +17,8 @@ format:
      - plugin/fullscreen
     css: assets/style.css
 editor: source
-# bibliography: references.bib
+bibliography: references.bib
+csl: isprs-journal-of-photogrammetry-and-remote-sensing.csl
 fig-dpi: 300
 ---
 
@@ -42,16 +43,46 @@ chm <- rast("data/chm.tif")
 # source("../../7_RS_AGB/code/9999_functions_modeling.R")
 
 
+thefont <- "Lato"
+
+theme_clean <- theme_light(base_family = "Lato", base_size = 18) %+replace% theme(panel.border = element_rect(fill = NA, colour = "black", size = rel(1)),
+                                                                      panel.grid = element_blank(), 
+                                                                      axis.ticks = element_line(colour = "black", size = rel(0.5)),
+                                                                      legend.position = "bottom", strip.text = element_text(colour = "black"),
+                                                                      strip.background = element_rect(fill = NA, colour = NA))
+
+ggplot2::theme_set(theme_clean)
+
+
+# Define custom palettes for when there are 1-2, 3, or 4-6 levels
+opts <- options(
+  ggplot2.discrete.colour = list(
+    c("#4575b4", "#66bd63"),
+    RColorBrewer::brewer.pal(3, "Set2"),
+    c("#4053d3", "#ddb310", "#b51d14", "#00beff", "#fb49b0"),
+    RColorBrewer::brewer.pal(6, "Accent")
+  )
+)
+opts <- options(
+  ggplot2.discrete.fill = list(
+    c("#4575b4", "#66bd63"),
+    RColorBrewer::brewer.pal(3, "Set2"),
+    c("#4053d3", "#ddb310", "#b51d14", "#00beff", "#fb49b0"),
+    RColorBrewer::brewer.pal(6, "Accent")
+  )
+)
+
+
 ```
 
 #  {background-color="white"}
 
 ::: title-center
-Forest inventories with Aiborne Laser Scanning: Area- and individual tree approaches
+Individual Tree Detection with Airborne Laser Scanning
 :::
 
 ::: threequarters-image
-
+<br>Piotr Tompalski<br><br>
 :::
 
 ::: half-image
@@ -63,33 +94,479 @@ Forest inventories with Aiborne Laser Scanning: Area- and individual tree approa
 
 ## Overview
 
-- What is ITD / ITS? 
-- How it differs from ABA?
-- How can it be applied?
-- How accurate it is?
-- What are the pros and cons?
-- Examples of different algorithms 
+-   Estimating forest attributes with ALS
+-   Area-based approach (very briefly)
+-   Individual tree approach
+-   Strengths and limitations of each approach
+-   Existing methods - how can we detect trees using ALS?
 
 ## Lidar-based inventories: two approaches
 
-Area-based approach 
+<br>
 
-Individual tree approach
+1.  **Area-based approach** [@naessetPredictingForestStand2002]
 
-## {fullscreen="true"}
+2.  **Individual tree approach** [@brandtberg1999AutomaticIndividualTree; @hyyppaDetectingEstimatingAttributes1999]
 
-![](images/chm.png){fig-align="center"}
+## Forest inventory? {background-image="images/p1.png" background-size="contain" background-repeat="no-repeat"}
 
-## {fullscreen="true"}
+## Grid-based {background-image="images/p2.png" background-size="contain" background-repeat="no-repeat"}
 
-![](images/chm_wGrid.png){fig-align="center"}
+## Area-based approach {background-image="images/p3.png" background-size="contain" background-repeat="no-repeat"}
+
+## Area-based approach {background-image="images/p4.png" background-size="contain" background-repeat="no-repeat"}
+
+## Area-based approach {background-image="images/p5.png" background-size="contain" background-repeat="no-repeat"}
 
 
-## {fullscreen="true"}
+## Alternative approach?  {background-image="images/p1.png" background-size="contain" background-repeat="no-repeat"}
 
-![](images/chm_wCrowns.png){fig-align="center"}
+## Individual tree detection  {background-image="images/p10.png" background-size="contain" background-repeat="no-repeat"}
+
+## Individual tree detection  {background-image="images/p11.png" background-size="contain" background-repeat="no-repeat"}
 
 
-## UAV lidar + tree detection
 
-Puliti, S., Pearse, G., Surový, P., Wallace, L., Hollaus, M., Wielgosz, M., & Astrup, R. (2023). FOR-instance: a UAV laser scanning benchmark dataset for semantic and instance segmentation of individual trees (Version 1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.8287792
+## Terminology
+
+::: columns
+::: {.column width="60%"}
+-   ITD - individual tree **detection**
+
+-   ITS - individual tree **segmentation**
+
+-   other:
+
+    -   ITC – individual tree crown
+    -   ITA – individual tree approach
+    -   single tree detection / segmentation
+:::
+
+::: {.column width="40%"}
+:::
+:::
+
+![](images/itd-its.png){.absolute top="0" right="0" height="100%"}
+
+## Trees?
+
+![](images/crossection.png)
+
+## Two-step approach
+
+::: columns
+::: {.column width="50%"}
+Step 1. **Locate treetops** ![](images/image28.png)
+:::
+
+::: {.column width="50%"}
+Step 2. **Segment tree crowns** ![](images/image27.png)
+:::
+:::
+
+# Locating treetops
+
+## Local maximum filter
+
+::: columns
+::: {.column width="50%"}
+-   Moving window:
+    -   Fixed size
+    -   Variable size
+-   Point cloud or CHM
+:::
+
+::: {.column width="50%"}
+<!-- Code to generate a similar animation: https://gist.github.com/ptompalski/94904eca2e1628fb52010c2890431715 -->
+:::
+:::
+
+![](images/ITD_animation_const_size.gif){.absolute top="0" right="0" height="50%"} ![](images/ITD_square_animation.gif){.absolute top="40%" right="0" height="50%"}
+
+## Local maximum filter
+
+::: columns
+::: {.column width="65%"}
+```{r, echo=FALSE}
+tibble(height=0:30,
+       ttops_1 = 5,
+       ttops_2 = height * 0.1 + 3) %>%
+  pivot_longer(cols = starts_with("tt"), names_to = "LMF type", values_to = "ws") %>%
+  ggplot(aes(height, ws, color=`LMF type`)) +
+  geom_line(linewidth = 2)+
+  ylim(0,6)+
+  
+  theme(legend.position = "inside", legend.position.inside = c(0.8,0.2))+
+  coord_fixed(ratio = 4)
+
+```
+
+```{r, echo=TRUE, eval=FALSE}
+ttops_1 <- locate_trees(las, lmf(ws = 5)) 
+
+f <- function(x) x * 0.1 + 3
+ttops_2 <- locate_trees(las, lmf(f)) 
+```
+:::
+
+::: {.column width="35%"}
+:::
+:::
+
+![](images/ttops_comparison.png){.absolute top="0" right="0" height="100%"}
+
+## VWF
+
+::: columns
+::: {.column width="50%"}
+-   Variable Window Filtering
+-   Implemented in Fusion, lidR, other
+-   first described in @popescu2002EstimatingPlotlevelTree
+
+$$
+WS = 2.21 + 0.01022H^2
+$$
+:::
+
+::: {.column width="50%"}
+![](images/image14.png)
+:::
+:::
+
+## Influence of CHM
+
+![](images/itd_chm_comparison.png)
+
+# Segmenting tree crowns
+
+## Segmentation
+
+-   CHM-based methods (2D)
+
+-   Point cloud-based methods (3D)
+
+-   Semantic and instance segmentation:
+  - Semantic: assigns class label e.g. trees / no trees
+  - Instance: identifies individual objects within a class 
+
+## Method: Watershed
+
+::: columns
+::: {.column width="50%"}
+-   CHM-based
+-   hydrology-based:
+    -   $CHM * (-1)$
+    -   simulate water flow
+    -   delineate "watersheds"
+-   `lidR::watershed()`
+:::
+
+::: {.column width="50%"}
+![@Chen2006d](images/image16.png){height="400px"}
+:::
+:::
+
+## Method: Watershed
+
+![](images/watershed.png) Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
+
+## Method: @silvaImputationIndividualLongleaf2016
+
+::: columns
+::: {.column width="50%"}
+-   CHM-based
+- seed (treetop) + voronoi tesselation
+-   `lidR::silva2016()`
+
+:::
+
+::: {.column width="50%"}
+![@silvaImputationIndividualLongleaf2016](images/ujrs_a_1196582_f0003_b.jpg)
+:::
+
+:::
+
+
+
+## Method: @dalponteTreeCentricMapping2016
+
+::: columns
+::: {.column width="70%"}
+- CHM-based
+- treetops are "grown" into crowns
+- pixel is added to the crown if 
+  1. the pixel height relative to the seed height and mean crown height meets thresholds
+  2. the pixel is within the allowable distance from the seed
+- `lidR::dalponte2016()`
+
+::: 
+::: {.column width="30%"}
+![](images/regionGrowing.png){height="500px"}
+::: 
+
+::: 
+
+## Method: @liNewMethodSegmenting2012
+
+::: columns
+::: {.column width="50%"}
+-   Point cloud based
+-   Core idea: distance between treetops and tree crowns
+-   Algorithm starts at the top and "grows" target tree by including nearby points
+-   `lidR::li2012()`
+:::
+
+::: {.column width="50%"}
+![@liNewMethodSegmenting2012](images/Li2012.png)
+:::
+:::
+
+## Method: Adaptive Mean Shift
+
+::: columns
+::: {.column width="65%"}
+-  Point cloud based
+-  3D clustering method, cylindrical search neighborhood
+-  controlled by the kernel size
+
+:::
+
+::: {.column width="35%"}
+![@ferraz2016LidarDetectionIndividual](images/1-s2.0-S0034425716302292-gr3_lrg.jpg){height="400px"}
+:::
+:::
+
+
+## Deep learning
+
+::: columns
+::: {.column width="60%"}
+- CNN-based models trained to recognize local maxima
+- segmentation networks (e.g. U-Net) predict crown boundaries
+- training requires large annotated datasets 
+- high computational demand
+- sensitivity to training data
+:::
+::: {.column width="40%"}
+![@chadwick2020AutomaticDelineationHeight](images/ChadwickDL.png){height="500px"}
+:::
+:::
+
+## Deep learning
+
+::: columns
+::: {.column width="50%"}
+`SegmentAnyTree`
+
+Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSensorPlatform]
+:::
+:::
+
+![](images/1-s2.0-S0034425724003936-gr7_lrg.jpg){.absolute top="0" right="0" height="100%"}
+
+
+## ULS
+
+::: columns
+::: {.column width="60%"}
+- ULS = UAV + ALS
+- Very high point density (often >1000 pts/m²)
+- Finer detail, but small area
+- Better identification of small and suppressed trees
+:::
+::: {.column width="40%"}
+
+
+![Data from @puliti2023FORinstanceUAVLaser](images/itd_spin.gif)
+:::
+:::
+
+ 
+
+# Accuracy assessment
+
+## Accuracy assessment
+
+-   *TP* - true positives (valid matches)
+-   *FP* - false positives, type 1 error (detected, but not existing)
+-   *FN* - false negatives, type 2 error (not detected, but existing)
+
+
+## Accuracy assessment
+
+::: columns
+::: {.column .text80 width="65%"}
+-   **Recall** (producer’s accuracy) – proportion of correctly detected trees out of all trees mapped on the field
+-   **Precision** (user’s accuracy) - the proportion of correctly detected trees out of all detected trees
+-   **F-score** - harmonic mean of recall and precision
+-   **Jaccard Index** = intersection over union (IoU)
+:::
+
+::: {.column .text80 .left width="35%"}
+$$
+recall=\frac{TP}{TP+FN}
+$$
+
+$$
+precision=\frac{TP}{TP+FP}
+$$
+
+$$
+Fscore = 2\frac{recall*precision}{recall+precision}
+$$ $$
+J(A,B) = \frac{A\cap B}{A\cup B}
+$$
+:::
+:::
+
+## Accuracy assessment - example
+
+::: r-stack
+
+![ ](images/AccAssessm_1.png){.fragment height="500"} 
+
+![ ](images/AccAssessm_2.png){.fragment height="500"} 
+
+![ ](images/AccAssessm_3.png){.fragment height="500"} 
+
+![ ](images/AccAssessm_4.png){.fragment height="500"}
+
+![ ](images/AccAssessm_5.png){.fragment height="500"}
+
+
+![ ](images/AccAssessm_6.png){.fragment height="500"}
+
+
+![ ](images/AccAssessm_7.png){.fragment height="500"}
+:::
+
+# What is the typical accuracy of individual tree detection methods?
+
+
+## Benchmarks
+
+::: text80
+-   "The percentage of detected trees varies between **25%** to **102%**" [@Kaartinen2012b]
+-   "The overall performance shows a matching rate of **47%**" [@eysnBenchmarkLidarbasedSingle2015]
+-   "Almost **74%** of the crowns segmented \[...\] were associated with a crown from the reference with a Jaccard index ≥ 50%" [@aubry-kientzComparativeAssessmentPerformance2019]
+-   "the average F-score were **0.47** using a lower pulse density ALS dataset \[...\] and **0.50** using a higher pulse density ALS dataset" [@sparksCrossComparisonIndividualTree2022]
+-   "The best algorithm overall was AMS3D, with precision **0.5** and recall **0.41** for the tallest trees (\>25 m)" [@cao2023BenchmarkingAirborneLaser]
+:::
+
+## Factors influencing accuracy
+
+- Point density
+- Acquisition time (leaf-on vs leaf-off)
+- Canopy structure (e.g. dense, overlapping canopies; large crowns with multiple apexes)
+- Influence of algorithm parameters
+- Role of training data in machine learning
+
+## Challenges
+
+<br>
+
+*"Despite the wealth of research done in ITC segmentation over the past 20 years, the state-of-the-art for tree detection and segmentation algorithms has improved only marginally."* [@wielgosz2024SegmentAnyTreeSensorPlatform]
+
+::: text80
+- poor detection rates of co-dominant trees (i.e. trees in the dominant canopy but very close to each other)
+- severe under-detection of suppressed or understory trees.
+::: 
+
+## Challenges
+
+![ ](images/crossection_colored2.png)
+
+
+## Know the limitations of ITD
+
+- Detected trees are those whose crowns are directly visible from above (dominant, co-dominant) [@Kaartinen2012b]
+- Results are still very useful: large trees drive several important ecosystem functions, dominate basal area, volume, carbon, or growth [@jeronimo2018ApplyingLiDARIndividual]
+- Missing trees: small-tree augmentation [@breidenbachPredictionSpeciesSpecific2010;@xuCalibrationAreaBased2014]
+
+
+## Tree-Approximate Objects
+
+TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018ApplyingLiDARIndividual]
+
+![@jeronimo2018ApplyingLiDARIndividual](images/fvy02305.jpeg)
+
+## Tree-level attributes
+
+- extracted directly from the point cloud: 
+  - tree height
+  - crown size
+- derived through modeling: 
+  - dbh
+  - stem volume
+  - biomass
+
+
+## Tree-level attributes: height
+
+- Underestimated
+- Mean error: -0.43 - -1.05 m [@andersenRigorousAssessmentTree2006]
+- What factors influence the accuracy?
+
+![@zimbleCharacterizingVerticalForest2003](images/Zimble2003.png)
+
+
+## Tree-level attributes: DBH
+::: text80
+- developing models that link DBH with tree-level metrics
+- metrics: point cloud and segment-based
+- $DBH=f(H, crown\_area, crown\_volume, ...)$
+- similar approach for volume, biomass
+:::
+
+::: columns
+::: {.column width="60%"}
+![@hao2021IndividualTreeDiameter](images/remotesensing-13-00024-ag.webp)
+:::
+::: {.column width="40%"}
+![@yao2012TreeSpeciesClassification](images/YaoITDdbh.png)
+:::
+:::
+
+## Species classification
+
+::: text80
+- Based on: tree crown geometry, intensity metrics, full-waveform decomposition
+- multi-spectral lidar
+- accuracy: ~89% (2 species), ~62% (6 species) [@michalowska2021ReviewTreeSpeciesb]
+:::
+![@qian2023TreeSpeciesClassification](images/crown_shapes.png){.center}
+
+
+
+## Estimating change
+
+::: text80
+- Multiple ALS datasets (different acquisition parameters, densities etc)
+- Tree detection / segmentation independent for each dataset
+- Requires tree-to-tree matching (challenging)
+- See @tompalski2021EstimatingChangesForest
+:::
+
+![](images/image51.png){.center}
+
+
+
+
+
+# Summary
+
+## Summary
+
+- Large area, tree-level inventory attributes!
+- Good for homogenous, even-age, coniferous forest stands
+- More complex and time consuming than ABA
+- Risk of biased results
+
+
+# Questions? {background-image="images/image4.png"}
+
+
+## References {visibility="uncounted"}
+
+::: {#refs}
+:::
