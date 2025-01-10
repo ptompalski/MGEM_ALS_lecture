@@ -116,3 +116,11 @@ h2 {
   margin-bottom: 20px !important;
   text-shadow: #ffffff 1px 0 10px !important;
 }
+
+h1 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+}
