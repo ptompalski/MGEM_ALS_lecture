@@ -6,7 +6,7 @@ format:
     self-contained: false
     # theme: simple
     theme: assets/clean_pt.scss
-    embed-resources: false
+    embed-resources: true
     # logo: images\NRCan_CFS_logo_PT_englishOnly_small.png
     footer: "piotr.tompalski@nrcan-rncan.gc.ca"
     margin: 0.1
