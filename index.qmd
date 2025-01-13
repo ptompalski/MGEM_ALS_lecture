@@ -1,6 +1,6 @@
 ---
-title: ""
-author: ""
+title: "Individual Tree Detection with Airborne Laser Scanning"
+author: "Piotr Tompalski"
 format:
   revealjs:
     self-contained: false
@@ -22,7 +22,10 @@ editor: source
 bibliography: references.bib
 csl: isprs-journal-of-photogrammetry-and-remote-sensing.csl
 fig-dpi: 300
-
+title-slide-attributes: 
+  data-background-image: images/NRCan_CFS_logo_PT.png
+  data-background-size: 20%
+  data-background-position: 50% 80%
 ---
 
 ```{r}
@@ -78,22 +81,6 @@ opts <- options(
 
 ```
 
-#  {background-color="white"}
-
-::: title-center
-Individual Tree Detection with Airborne Laser Scanning
-:::
-
-::: threequarters-image
-<br>Piotr Tompalski<br><br>
-:::
-
-::: half-image
-![](images/NRCan_CFS_logo_PT.png){fig-alt="NRCan-CFS-logo"}
-:::
-
-::: footer
-:::
 
 ## Overview
 

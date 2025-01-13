@@ -64,7 +64,8 @@ body {
 // title and headings
 
 #title-slide {
-  text-align: left;
+  text-align: center;
+  
 
   .title {
     color: $body-color;
@@ -95,7 +96,7 @@ body {
 
   .quarto-title-authors {
     display: flex;
-    justify-content: left;
+    //justify-content: left;
 
     .quarto-title-author {
       padding-left: 0em;
