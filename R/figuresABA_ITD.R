@@ -4,9 +4,17 @@ library(dplyr)
 library(ggtext)
 library(grid)
 library(RStoolbox)
+# library(khroma)
+library(scico)
+library(extrafont)
+# extrafont::font_import()
+extrafont::loadfonts(device="win")
 
-cols_gradient <- c(low = "#002070", mid = "#DD6677", high = "#F1F1A1")
+# cols_gradient <- c(low = "#002070", mid = "#DD6677", high = "#F1F1A1")
+# cols_gradient <- c(low = "#043206", mid = "#E1CA34", high = "#FBF3BA")
 cols_gradient <- rev(RColorBrewer::brewer.pal(name="Spectral",n=11))
+# cols_gradient <- viridis::mako(n = 10)
+# cols_gradient <- scico::scico(10, palette = "navia")
 
 theme_map = theme(
   panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
@@ -47,6 +55,7 @@ p1 <- ggR(chm, geom_raster = T) +
   scale_y_continuous(expand = expansion(mult = c(0, 0))) +
   theme_bw(base_size = 18,base_family="Lato") +
   theme_map 
+p1
 ggsave(p1, filename = "images/p1.png", width = 16, height = 9)
 
 

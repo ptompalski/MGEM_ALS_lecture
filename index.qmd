@@ -3,8 +3,9 @@ title: ""
 author: ""
 format:
   revealjs:
-    self-contained: true
-    theme: simple
+    self-contained: false
+    # theme: simple
+    theme: assets/clean_pt.scss
     embed-resources: true
     # logo: images\NRCan_CFS_logo_PT_englishOnly_small.png
     footer: "piotr.tompalski@nrcan-rncan.gc.ca"
@@ -13,13 +14,15 @@ format:
     show-slide-number: all
     scrollable: false
     chalkboard: false
-    revealjs-plugins:
-     - plugin/fullscreen
-    css: assets/style.css
+    #revealjs-plugins:
+    # - plugin/fullscreen
+    # css: assets/style.css
+    html-math-method: katex
 editor: source
 bibliography: references.bib
 csl: isprs-journal-of-photogrammetry-and-remote-sensing.csl
 fig-dpi: 300
+
 ---
 
 ```{r}
@@ -110,7 +113,7 @@ Individual Tree Detection with Airborne Laser Scanning
 
 ## Forest inventory? {background-image="images/p1.png" background-size="contain" background-repeat="no-repeat"}
 
-## Grid-based {background-image="images/p2.png" background-size="contain" background-repeat="no-repeat"}
+## Area-based approach {background-image="images/p2.png" background-size="contain" background-repeat="no-repeat"}
 
 ## Area-based approach {background-image="images/p3.png" background-size="contain" background-repeat="no-repeat"}
 
@@ -246,8 +249,8 @@ $$
 -   Point cloud-based methods (3D)
 
 -   Semantic and instance segmentation:
-  - Semantic: assigns class label e.g. trees / no trees
-  - Instance: identifies individual objects within a class 
+    - Semantic: assigns class label e.g. trees / no trees
+    - Instance: identifies individual objects within a class 
 
 ## Method: Watershed
 
@@ -268,7 +271,9 @@ $$
 
 ## Method: Watershed
 
-![](images/watershed.png) Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
+![](images/watershed.png) 
+
+Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 
 ## Method: @silvaImputationIndividualLongleaf2016
 
@@ -355,9 +360,8 @@ $$
 ## Deep learning
 
 ::: columns
-::: {.column width="50%"}
-`SegmentAnyTree`
-
+::: {.column width="45%"}
+`SegmentAnyTree`:\
 Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSensorPlatform]
 :::
 :::
@@ -387,22 +391,22 @@ Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSenso
 
 ## Accuracy assessment
 
--   *TP* - true positives (valid matches)
--   *FP* - false positives, type 1 error (detected, but not existing)
--   *FN* - false negatives, type 2 error (not detected, but existing)
+-   ***TP*** -- **true positives** (valid matches)
+-   ***FP*** -- **false positives**, type 1 error (detected, but not existing)
+-   ***FN*** -- **false negatives**, type 2 error (not detected, but existing)
 
 
 ## Accuracy assessment
 
 ::: columns
-::: {.column .text80 width="65%"}
+::: {.column width="65%"}
 -   **Recall** (producer’s accuracy) – proportion of correctly detected trees out of all trees mapped on the field
 -   **Precision** (user’s accuracy) - the proportion of correctly detected trees out of all detected trees
 -   **F-score** - harmonic mean of recall and precision
 -   **Jaccard Index** = intersection over union (IoU)
 :::
 
-::: {.column .text80 .left width="35%"}
+::: {.column .text80 width="35%"}
 $$
 recall=\frac{TP}{TP+FN}
 $$
@@ -445,7 +449,7 @@ $$
 
 ## Benchmarks
 
-::: text80
+:::text80
 -   "The percentage of detected trees varies between **25%** to **102%**" [@Kaartinen2012b]
 -   "The overall performance shows a matching rate of **47%**" [@eysnBenchmarkLidarbasedSingle2015]
 -   "Almost **74%** of the crowns segmented \[...\] were associated with a crown from the reference with a Jaccard index ≥ 50%" [@aubry-kientzComparativeAssessmentPerformance2019]
@@ -463,14 +467,10 @@ $$
 
 ## Challenges
 
-<br>
-
-*"Despite the wealth of research done in ITC segmentation over the past 20 years, the state-of-the-art for tree detection and segmentation algorithms has improved only marginally."* [@wielgosz2024SegmentAnyTreeSensorPlatform]
-
-::: text80
+- *"Despite the wealth of research done in ITC segmentation over the past 20 years, the state-of-the-art for tree detection and segmentation algorithms has improved only marginally."* [@wielgosz2024SegmentAnyTreeSensorPlatform]
 - poor detection rates of co-dominant trees (i.e. trees in the dominant canopy but very close to each other)
 - severe under-detection of suppressed or understory trees.
-::: 
+
 
 ## Challenges
 
@@ -504,7 +504,7 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 ## Tree-level attributes: height
 
 - Underestimated
-- Mean error: -0.43 - -1.05 m [@andersenRigorousAssessmentTree2006]
+- Mean error: -0.43 -- -1.05 m [@andersenRigorousAssessmentTree2006]
 - What factors influence the accuracy?
 
 ![@zimbleCharacterizingVerticalForest2003](images/Zimble2003.png)
@@ -540,12 +540,12 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 ## Estimating change
 
-::: text80
+
 - Multiple ALS datasets (different acquisition parameters, densities etc)
 - Tree detection / segmentation independent for each dataset
 - Requires tree-to-tree matching (challenging)
 - See @tompalski2021EstimatingChangesForest
-:::
+
 
 ![](images/image51.png){.center}
 
