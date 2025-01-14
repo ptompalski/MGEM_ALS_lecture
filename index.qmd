@@ -129,6 +129,7 @@ opts <- options(
 
     -   ITC – individual tree crown
     -   ITA – individual tree approach
+    -   ITI - individual tree inventory
     -   single tree detection / segmentation
 :::
 
@@ -431,7 +432,7 @@ $$
 ![ ](images/AccAssessm_7.png){.fragment height="500"}
 :::
 
-# What is the typical accuracy of individual tree detection methods?
+# What is the typical <br />accuracy of individual <br />tree detection methods? {.r-fit-text}
 
 
 ## Benchmarks
@@ -455,8 +456,8 @@ $$
 ## Challenges
 
 - *"Despite the wealth of research done in ITC segmentation over the past 20 years, the state-of-the-art for tree detection and segmentation algorithms has improved only marginally."* [@wielgosz2024SegmentAnyTreeSensorPlatform]
-- poor detection rates of co-dominant trees (i.e. trees in the dominant canopy but very close to each other)
-- severe under-detection of suppressed or understory trees.
+- Poor detection rates of trees in the dominant canopy but very close to each other
+- Severe under-detection of suppressed or understory trees
 
 
 ## Challenges
