@@ -90,6 +90,11 @@ opts <- options(
 -   Strengths and limitations of each approach
 -   Existing methods - how can we detect trees using ALS?
 
+
+
+
+
+
 ## Lidar-based inventories: two approaches
 
 <br>
@@ -98,26 +103,73 @@ opts <- options(
 
 2.  **Individual tree approach** [@brandtberg1999AutomaticIndividualTree; @hyyppaDetectingEstimatingAttributes1999]
 
+::: {.notes}
+There are two widely used approaches to extracting forest inventory information from airborne laser scanning data: the area-based approach and the individual tree approach. The ABA is well suited for large-scale applications, while ITD allows for detailed tree-level attributes
+:::
+
+
+
 ## Forest inventory? {background-image="images/p1.png" background-size="contain" background-repeat="no-repeat"}
+
+::: {.notes}
+Forest inventory is essential for sustainable forest management. It provides crucial data on tree species, biomass, and stand structure. Lidar-based methods improve efficiency and accuracy compared to traditional field-based inventory.
+:::
+
 
 ## Area-based approach {background-image="images/p2.png" background-size="contain" background-repeat="no-repeat"}
 
+::: {.notes}
+The ABA aggregates lidar-derived metrics over predefined grid cells and links them to field-measured plots. This allows for efficient large-scale inventory but lacks individual tree details.
+:::
+
 ## Area-based approach {background-image="images/p3.png" background-size="contain" background-repeat="no-repeat"}
+
+::: {.notes}
+
+:::
+
 
 ## Area-based approach {background-image="images/p4.png" background-size="contain" background-repeat="no-repeat"}
 
+::: {.notes}
+
+:::
+
+
 ## Area-based approach {background-image="images/p5.png" background-size="contain" background-repeat="no-repeat"}
+
+::: {.notes}
+
+:::
 
 
 ## Alternative approach?  {background-image="images/p1.png" background-size="contain" background-repeat="no-repeat"}
 
+::: {.notes}
+Instead of summarizing lidar metrics over areas, what if we could detect and measure individual trees? This is where the ITD approach comes in.
+:::
+
+
 ## Individual tree detection  {background-image="images/p10.png" background-size="contain" background-repeat="no-repeat"}
+
+::: {.notes}
+The ITD approach identifies and segments individual trees directly from lidar data. While it provides detailed tree-level attributes, it is more challenging in dense, mixed-species forests.
+:::
+
 
 ## Individual tree detection  {background-image="images/p11.png" background-size="contain" background-repeat="no-repeat"}
 
+::: {.notes}
+
+:::
 
 
 ## Terminology
+
+::: {.notes}
+ITD refers to detecting tree locations, while ITS focuses on delineating tree crowns. Other related terms include ITC (individual tree crown), ITA (individual tree approach), and ITI (individual tree inventory)
+:::
+
 
 ::: columns
 ::: {.column width="60%"}
@@ -141,9 +193,23 @@ opts <- options(
 
 ## Trees?
 
+::: {.notes}
+
+If you had to identify individual trees in a 3D point cloud, how would you approach it? The challenge is separating closely packed tree canopies and identifying smaller trees.
+
+:::
+
+
 ![](images/crossection.png)
 
+
+
 ## Two-step approach
+
+::: {.notes}
+Most ITD methods follow a two-step process: first, identifying treetops, and second, delineating tree crowns. Different algorithms handle each step differently.
+:::
+
 
 ::: columns
 ::: {.column width="50%"}
@@ -158,6 +224,11 @@ Step 2. **Segment tree crowns** ![](images/image27.png)
 # Locating treetops
 
 ## Local maximum filter
+
+::: {.notes}
+Local maximum filtering (LMF) identifies treetops as local peaks in the canopy height model (CHM). The choice of window size affects detection accuracy.
+:::
+
 
 ::: columns
 ::: {.column width="50%"}
@@ -175,6 +246,11 @@ Step 2. **Segment tree crowns** ![](images/image27.png)
 ![](images/ITD_animation_const_size.gif){.absolute top="0" right="0" height="50%"} ![](images/ITD_square_animation.gif){.absolute top="40%" right="0" height="50%"}
 
 ## Local maximum filter
+
+::: {.notes}
+VWF adapts the window size based on tree height, improving detection in mixed forests where tree sizes vary.
+:::
+
 
 ::: columns
 ::: {.column width="65%"}
@@ -208,6 +284,11 @@ ttops_2 <- locate_trees(las, lmf(f))
 
 ## VWF
 
+::: {.notes}
+Variable Window Filtering refines treetop detection by adjusting the search window as a function of tree height
+:::
+
+
 ::: columns
 ::: {.column width="50%"}
 -   Variable Window Filtering
@@ -226,11 +307,21 @@ $$
 
 ## Influence of CHM
 
+::: {.notes}
+A low-resolution CHM can lead to merged tree crowns and poor treetop detection. Higher resolution improves segmentation, but not always.
+:::
+
+
 ![](images/itd_chm_comparison.png)
 
 # Segmenting tree crowns
 
 ## Segmentation
+
+::: {.notes}
+Segmentation methods use CHM (2D) or point clouds (3D) to delineate crowns. Semantic segmentation classifies tree vs. non-tree, while instance segmentation identifies individual crowns.
+:::
+
 
 -   CHM-based methods (2D)
 
@@ -241,6 +332,11 @@ $$
     - Instance: identifies individual objects within a class 
 
 ## Method: Watershed
+
+::: {.notes}
+
+:::
+
 
 ::: columns
 ::: {.column width="50%"}
@@ -259,11 +355,21 @@ $$
 
 ## Method: Watershed
 
+::: {.notes}
+
+:::
+
+
 ![](images/watershed.png) 
 
 Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 
 ## Method: @silvaImputationIndividualLongleaf2016
+
+::: {.notes}
+
+:::
+
 
 ::: columns
 ::: {.column width="50%"}
@@ -283,6 +389,11 @@ Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 
 ## Method: @dalponteTreeCentricMapping2016
 
+::: {.notes}
+
+:::
+
+
 ::: columns
 ::: {.column width="70%"}
 - CHM-based
@@ -301,6 +412,11 @@ Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 
 ## Method: @liNewMethodSegmenting2012
 
+::: {.notes}
+
+:::
+
+
 ::: columns
 ::: {.column width="50%"}
 -   Point cloud based
@@ -315,6 +431,11 @@ Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 :::
 
 ## Method: Adaptive Mean Shift
+
+::: {.notes}
+
+:::
+
 
 ::: columns
 ::: {.column width="65%"}
@@ -332,6 +453,11 @@ Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 
 ## Deep learning
 
+::: {.notes}
+
+:::
+
+
 ::: columns
 ::: {.column width="60%"}
 - CNN-based models trained to recognize local maxima
@@ -347,6 +473,11 @@ Try it yourself! e.g.: ArcMap \> Spatial Analyst \> Hydrology
 
 ## Deep learning
 
+::: {.notes}
+
+:::
+
+
 ::: columns
 ::: {.column width="45%"}
 `SegmentAnyTree`:\
@@ -358,6 +489,11 @@ Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSenso
 
 
 ## ULS
+
+::: {.notes}
+
+:::
+
 
 ::: columns
 ::: {.column width="60%"}
@@ -379,12 +515,22 @@ Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSenso
 
 ## Accuracy assessment
 
+::: {.notes}
+
+:::
+
+
 -   ***TP*** -- **true positives** (valid matches)
 -   ***FP*** -- **false positives**, type 1 error (detected, but not existing)
 -   ***FN*** -- **false negatives**, type 2 error (not detected, but existing)
 
 
 ## Accuracy assessment
+
+::: {.notes}
+
+:::
+
 
 ::: columns
 ::: {.column width="65%"}
@@ -413,6 +559,11 @@ $$
 
 ## Accuracy assessment - example
 
+::: {.notes}
+
+:::
+
+
 ::: r-stack
 
 ![ ](images/AccAssessm_1.png){.fragment height="500"} 
@@ -434,8 +585,18 @@ $$
 
 # What is the typical <br />accuracy of individual <br />tree detection methods? {.r-fit-text}
 
+::: {.notes}
+Before we continue - what do you think the accuracy is?
+:::
+
+
 
 ## Benchmarks
+
+::: {.notes}
+
+:::
+
 
 :::text80
 -   "The percentage of detected trees varies between **25%** to **102%**" [@Kaartinen2012b]
@@ -447,6 +608,11 @@ $$
 
 ## Factors influencing accuracy
 
+::: {.notes}
+
+:::
+
+
 - Point density
 - Acquisition time (leaf-on vs leaf-off)
 - Canopy structure (e.g. dense, overlapping canopies; large crowns with multiple apexes)
@@ -455,6 +621,11 @@ $$
 
 ## Challenges
 
+::: {.notes}
+
+:::
+
+
 - *"Despite the wealth of research done in ITC segmentation over the past 20 years, the state-of-the-art for tree detection and segmentation algorithms has improved only marginally."* [@wielgosz2024SegmentAnyTreeSensorPlatform]
 - Poor detection rates of trees in the dominant canopy but very close to each other
 - Severe under-detection of suppressed or understory trees
@@ -462,10 +633,20 @@ $$
 
 ## Challenges
 
+::: {.notes}
+
+:::
+
+
 ![ ](images/crossection_colored2.png)
 
 
 ## Know the limitations of ITD
+
+::: {.notes}
+
+:::
+
 
 - Detected trees are those whose crowns are directly visible from above (dominant, co-dominant) [@Kaartinen2012b]
 - Results are still very useful: large trees drive several important ecosystem functions, dominate basal area, volume, carbon, or growth [@jeronimo2018ApplyingLiDARIndividual]
@@ -474,11 +655,21 @@ $$
 
 ## Tree-Approximate Objects
 
+::: {.notes}
+
+:::
+
+
 TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018ApplyingLiDARIndividual]
 
 ![@jeronimo2018ApplyingLiDARIndividual](images/fvy02305.jpeg)
 
 ## Tree-level attributes
+
+::: {.notes}
+
+:::
+
 
 - extracted directly from the point cloud: 
   - tree height
@@ -491,6 +682,11 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 ## Tree-level attributes: height
 
+::: {.notes}
+
+:::
+
+
 - Underestimated
 - Mean error: -0.43 -- -1.05 m [@andersenRigorousAssessmentTree2006]
 - What factors influence the accuracy?
@@ -499,6 +695,11 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 
 ## Tree-level attributes: DBH
+
+::: {.notes}
+
+:::
+
 ::: text80
 - developing models that link DBH with tree-level metrics
 - metrics: point cloud and segment-based
@@ -517,6 +718,11 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 ## Species classification
 
+::: {.notes}
+
+:::
+
+
 ::: text80
 - Based on: tree crown geometry, intensity metrics, full-waveform decomposition
 - multi-spectral lidar
@@ -527,6 +733,11 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 
 ## Estimating change
+
+::: {.notes}
+
+:::
+
 
 
 - Multiple ALS datasets (different acquisition parameters, densities etc)
@@ -545,8 +756,13 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 ## Summary
 
+::: {.notes}
+
+:::
+
+
 - Large area, tree-level inventory attributes!
-- Good for homogenous, even-age, coniferous forest stands
+- Good for homogeneous, even-age, coniferous forest stands
 - More complex and time consuming than ABA
 - Risk of biased results
 
