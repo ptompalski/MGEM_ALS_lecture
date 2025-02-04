@@ -8,7 +8,7 @@ format:
     theme: assets/clean_pt.scss
     embed-resources: true
     # logo: images\NRCan_CFS_logo_PT_englishOnly_small.png
-    footer: "piotr.tompalski@nrcan-rncan.gc.ca"
+    footer: "piotr.tompalski@nrcan-rncan.gc.ca | ptompalski.github.io/MGEM_ALS_lecture/"
     margin: 0.1
     slide-number: true
     show-slide-number: all
