@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .laz
+data/*.laz
 
 /.quarto/
 images

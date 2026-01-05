@@ -245,8 +245,8 @@ plot(d,color="treeID", bg="white",pal = random.colors)
 
 library(rgl)
 
-view3d(theta = 0, phi = -90, fov = 60, zoom = 1)
-# play3d(spin3d())
+view3d(theta = 0, phi = -90, fov = 60, zoom = 0.85)
+play3d(spin3d())
 movie3d(spin3d(rpm = 6), fps=20, duration = 10, top=T, movie = "itd_spin", dir="C:\\TEMP\\temp_frames")
 
 # Modify the GIF to loop indefinitely
@@ -259,3 +259,6 @@ gif_path <- file.path("C:\\TEMP\\temp_frames", "itd_spin.gif")
 gif <- image_read(gif_path)               # Read the GIF
 gif <- image_animate(gif, fps = 20, loop = 0)  # Set to loop indefinitely
 image_write(gif, gif_path)                # Save the modified GIF
+
+
+with <- c(list(x = d@data[["X"]], y = d@data[["Y"]], z = d@data[["Z"]], col = col), args)

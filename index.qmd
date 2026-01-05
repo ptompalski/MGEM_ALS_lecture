@@ -724,9 +724,10 @@ TAO = one dominant tree and up to a few subordinate trees [@jeronimo2018Applying
 
 
 ::: text80
-- Based on: tree crown geometry, intensity metrics, full-waveform decomposition
-- multi-spectral lidar
-- accuracy: ~89% (2 species), ~62% (6 species) [@michalowska2021ReviewTreeSpeciesb]
+- Based on: tree crown geometry, intensity metrics, full-waveform decomposition, multi-spectral lidar
+- Accuracy:
+  - ~89% (2 species), ~62% (6 species) [@michalowska2021ReviewTreeSpeciesb]
+  - Using eigenfeatures, 7 species: 94.8% [@blackburn2025EigenfeatureenhancedDeepLearning]
 :::
 ![@qian2023TreeSpeciesClassification](images/crown_shapes.png){.center}
 
