@@ -7,3 +7,4 @@ data/*.laz
 
 /.quarto/
 images
+deploy.R
