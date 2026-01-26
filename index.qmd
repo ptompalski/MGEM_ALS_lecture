@@ -84,6 +84,8 @@ opts <- options(
 
 ## Overview
 
+
+
 -   Estimating forest attributes with ALS
 -   Area-based approach (very briefly)
 -   Individual tree approach
@@ -516,7 +518,19 @@ Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSenso
 ## Accuracy assessment
 
 ::: {.notes}
-
+- First: accuracy assessment = **comparing two lists of trees**
+  - Reference (“truth”): usually **field-mapped trees** (stem map) or high-quality manual interpretation
+  - Predictions: **detected trees / crowns** from ALS
+- Key step: we need a **matching rule**:
+  - A detected treetop matches a field tree if it’s within a tolerance (e.g., within X meters), and sometimes also similar height
+  - You can think of this as “pairing up” trees between the two lists
+- After matching, every item falls into one of three buckets:
+  - **TP (true positive):** we detected a tree and it matches a real tree  
+    - “Correct detection”
+  - **FP (false positive):** we detected a tree, but there is **no corresponding real tree**  
+    - “We invented a tree” (often from noise, crown bumps, branches, multiple peaks in one crown)
+  - **FN (false negative):** a real tree exists, but we **missed it**  
+    - “Undetected tree” (often suppressed/understory, or crowns merged)
 :::
 
 
@@ -528,7 +542,30 @@ Sensor and platform agnostic tree segmentation [@wielgosz2024SegmentAnyTreeSenso
 ## Accuracy assessment
 
 ::: {.notes}
-
+- Now that we have TP / FP / FN, we can summarize performance in two intuitive questions:
+- **Recall = “How many of the real trees did we find?”**
+  - Formula: TP / (TP + FN)
+  - Notice that field trees are the denominator
+  - High recall means: we’re not missing many trees
+  - Low recall often means: crowns merged OR understory invisible
+- **Precision = “How many of our detections are actually real?”**
+  - Formula: TP / (TP + FP)
+  - Notice that detected trees are the denominator
+  - High precision means: few false treetops
+  - Low precision often means: CHM is noisy, window size too small, multiple peaks per crown
+- Tradeoff:
+  - If I make the detector “more sensitive” → recall goes up, but I usually create more FP → precision drops
+  - If I make it “more conservative” → precision goes up, but I miss trees → recall drops
+- **F-score** is a single-number summary that balances both:
+  - Harmonic mean (penalizes if one is low)
+  - Good when you want “overall detection quality”
+- **Jaccard / IoU** is different: it’s about **crown overlap quality**, not just treetop detection
+  - A = predicted crown polygon, B = reference crown polygon
+  - IoU close to 1 = strong overlap; close to 0 = poor overlap
+  - Use it when evaluating segmentation, not just detection
+- Another way to think about it:
+  - “Precision/recall = did we find the right trees?”
+  - “Jaccard = did we draw the crown correctly?”
 :::
 
 
@@ -557,10 +594,34 @@ $$
 :::
 :::
 
+
+## Accuracy assessment - tree crowns
+
+::: columns
+::: {.column width="50%"}
+![@terven2023ComprehensiveReviewYOLOa](images/ntersection-over-Union-IoU-a-The-IoU-is-calculated-by-dividing-the-intersection-of_W640.jpg)
+:::
+
+::: {.column width="50%"}
+![@dersch2023CompleteTreeCrown](images/1-s2.0-S266739322300008X-gr8.jpg)
+:::
+:::
+
+
+
 ## Accuracy assessment - example
 
 ::: {.notes}
-
+- Step by step:
+  - Here are the field trees (reference)
+  - Here are the detected treetops (predictions)
+  - Now we apply the matching rule — typically nearest neighbor within a radius
+- When a detected point lands near a reference point:
+  - Count it as **TP** (paired match)
+- When a detected point has no nearby reference point:
+  - That’s a **FP** (extra detection)
+- When a reference point has no nearby detection:
+  - That’s a **FN** (missed tree)
 :::
 
 
